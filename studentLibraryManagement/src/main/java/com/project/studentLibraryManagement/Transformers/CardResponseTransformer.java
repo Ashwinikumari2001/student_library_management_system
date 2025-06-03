@@ -11,7 +11,7 @@ public class CardResponseTransformer {
                 .studentDepartment(student.getDepartment())
                 .studentSemester(student.getSemester())
                 .cardId(card.getId())
-                .cardStatus(card.getCardStatus().toString())
+                .cardStatus(card.getCardStatus())
                 .expiryDate(card.getExpiryDate())
                 .createdDate(card.getCreatedDate())
                 .build();

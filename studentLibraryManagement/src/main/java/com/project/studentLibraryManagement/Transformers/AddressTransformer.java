@@ -1,6 +1,7 @@
 package com.project.studentLibraryManagement.Transformers;
 
 import com.project.studentLibraryManagement.Models.Address;
+import com.project.studentLibraryManagement.RequestDto.AuthorRequestDto;
 import com.project.studentLibraryManagement.RequestDto.StudentRequestDto;
 
 public class AddressTransformer {
@@ -12,6 +13,16 @@ public class AddressTransformer {
                 .locality(studentRequestDto.getLocality())
                 .area(studentRequestDto.getArea())
                 .pincode(studentRequestDto.getPincode())
+                .build();
+    }
+    public static Address createAddressFromRequestDto(AuthorRequestDto authorRequestDto) {
+        return Address.builder()
+                .country(authorRequestDto.getCountry())
+                .state(authorRequestDto.getState())
+                .city(authorRequestDto.getCity())
+                .locality(authorRequestDto.getLocality())
+                .area(authorRequestDto.getArea())
+                .pincode(authorRequestDto.getPincode())
                 .build();
     }
 }

@@ -39,6 +39,6 @@ public class Card {
 
     @OneToMany(mappedBy = "card",cascade = CascadeType.ALL)
     private List<Transaction> transactions;
-    @OneToMany(mappedBy = "card",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "card",cascade = CascadeType.PERSIST)
     private List<Book> books;
 }

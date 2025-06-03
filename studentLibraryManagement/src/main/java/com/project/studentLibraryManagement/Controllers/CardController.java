@@ -19,6 +19,5 @@ public class CardController {
                                                       @PathVariable int studentId) {
         CardResponseDto cardResponseDto=cardService.createCard(cardRequestDto,studentId);
         return ResponseEntity.status(HttpStatus.CREATED).body(cardResponseDto);
-
     }
 }
