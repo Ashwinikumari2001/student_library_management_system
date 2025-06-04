@@ -54,6 +54,7 @@ public class CardService {
         }
         card.setCardStatus(cardRequestDto.getCardStatus());
         card.setExpiryDate(cardRequestDto.getExpiryDate());
+        card.setUpdatedDate(new Date());
         student.setCard(card);
         studentRepository.save(student);
         return CardResponseTransformer.createCardResponseFromCard(student,card);
@@ -69,6 +70,7 @@ public class CardService {
             if(card.getExpiryDate().before(date)) {
                 updatedCardCount++;
                 card.setCardStatus(CardStatus.EXPIRED);
+                card.setUpdatedDate(new Date());
                 Student student=card.getStudent();
                 cardRepository.save(card);
                 cardResponseDtoList.add(CardResponseTransformer.createCardResponseFromCard(student,card));
@@ -81,6 +83,7 @@ public class CardService {
             if(daysBetween>90 && card.getTransactions().isEmpty()){
                 updatedCardCount++;
                 card.setCardStatus(CardStatus.INACTIVE);
+                card.setUpdatedDate(new Date());
                 Student student=card.getStudent();
                 cardRepository.save(card);
                 cardResponseDtoList.add(CardResponseTransformer.createCardResponseFromCard(student,card));
@@ -89,6 +92,7 @@ public class CardService {
             if(card.getBooks().size()>=5){
                 updatedCardCount++;
                 card.setCardStatus(CardStatus.BLOCKED);
+                card.setUpdatedDate(new Date());
                 Student student=card.getStudent();
                 cardRepository.save(card);
                 cardResponseDtoList.add(CardResponseTransformer.createCardResponseFromCard(student,card));

@@ -26,10 +26,10 @@ public class Card {
     @Column(name = "card_status",nullable = false)
     private CardStatus cardStatus;
     @Column(name = "created_date",nullable = false)
-    @CreationTimestamp//this annotation is used to automatically set the current date and time when the card is created
+//    @CreationTimestamp//this annotation is used to automatically set the current date and time when the card is created
     private Date createdDate;
     @Column(name = "updated_date",nullable = false)
-    @UpdateTimestamp
+//    @UpdateTimestamp
     private Date updatedDate;
     @Column(name = "expiry_date",nullable = false)
     private Date expiryDate;
