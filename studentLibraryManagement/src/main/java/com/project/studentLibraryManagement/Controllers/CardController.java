@@ -2,11 +2,14 @@ package com.project.studentLibraryManagement.Controllers;
 
 import com.project.studentLibraryManagement.RequestDto.CardRequestDto;
 import com.project.studentLibraryManagement.ResponseDto.CardResponseDto;
+import com.project.studentLibraryManagement.ResponseDto.CardStatusUpdateResponseDto;
 import com.project.studentLibraryManagement.Services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.smartcardio.Card;
 
 @RestController
 @RequestMapping("/card")
@@ -20,4 +23,17 @@ public class CardController {
         CardResponseDto cardResponseDto=cardService.createCard(cardRequestDto,studentId);
         return ResponseEntity.status(HttpStatus.CREATED).body(cardResponseDto);
     }
+    @PutMapping("/updateCard/{studentEmail}")
+    public ResponseEntity<CardResponseDto> updateCard(@RequestBody CardRequestDto cardRequestDto,@PathVariable String studentEmail){
+        CardResponseDto cardResponseDto=cardService.updateCard(cardRequestDto,studentEmail);
+        return ResponseEntity.status(HttpStatus.OK).body(cardResponseDto);
+    }
+
+    @PutMapping("/updateCardStatus")
+    public ResponseEntity<CardStatusUpdateResponseDto> cardStatusUpdate(){
+        CardStatusUpdateResponseDto cardStatusUpdateResponseDto=cardService.cardStatusUpdate();
+        return ResponseEntity.status(HttpStatus.OK).body(cardStatusUpdateResponseDto);
+    }
+
+
 }
