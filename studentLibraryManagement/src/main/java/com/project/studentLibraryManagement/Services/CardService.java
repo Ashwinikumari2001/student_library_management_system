@@ -39,8 +39,9 @@ public class CardService {
         Card card= CardTransformer.createCardFromRequestDto(cardRequestDto);
         student.setCard(card);
         card.setStudent(student);
-        studentRepository.saveAndFlush(student);
-        return CardResponseTransformer.createCardResponseFromCard(student,card);
+        Student savedCard=studentRepository.save(student);
+        Card card2=savedCard.getCard();
+        return CardResponseTransformer.createCardResponseFromCard(student,card2);
     }
 
     public CardResponseDto updateCard(CardRequestDto cardRequestDto, String studentEmail) {

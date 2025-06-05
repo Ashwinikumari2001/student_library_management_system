@@ -21,7 +21,7 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "card_id")
-    private int id;
+    private Integer id;
     @Enumerated(EnumType.STRING)
     @Column(name = "card_status",nullable = false)
     private CardStatus cardStatus;

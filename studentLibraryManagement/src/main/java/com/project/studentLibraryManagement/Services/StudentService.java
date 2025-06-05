@@ -1,11 +1,10 @@
 package com.project.studentLibraryManagement.Services;
 
 import com.project.studentLibraryManagement.Enums.Gender;
-import com.project.studentLibraryManagement.Models.Address;
-import com.project.studentLibraryManagement.Models.Card;
-import com.project.studentLibraryManagement.Models.Student;
+import com.project.studentLibraryManagement.Models.*;
 import com.project.studentLibraryManagement.Repository.StudentRepository;
 import com.project.studentLibraryManagement.RequestDto.StudentRequestDto;
+import com.project.studentLibraryManagement.ResponseDto.BookResponseDto;
 import com.project.studentLibraryManagement.ResponseDto.StudentDeleteDto;
 import com.project.studentLibraryManagement.ResponseDto.StudentResponseDto;
 import com.project.studentLibraryManagement.ResponseDto.StudentResponseDto2;
@@ -83,5 +82,18 @@ public class StudentService {
         Student student=studentRepository.findById(studentId).orElseThrow();
         studentRepository.deleteById(studentId);
         return StudentDeleteTransformer.studentDeleteDto(student);
+    }
+
+    public List<BookResponseDto> getBooks(String studentEmail) {
+        Student student=studentRepository.findByEmail(studentEmail).orElseThrow();
+        Card card=student.getCard();
+        List<Book> bookList=card.getBooks();
+        List<BookResponseDto> bookResponseDtos=new ArrayList<>();
+        for(Book book:bookList){
+            Author author=book.getAuthor();
+            BookResponseDto bookResponseDto=BookResponseTransformer.createBookResponseDtoFromBook(book,author);
+            bookResponseDtos.add(bookResponseDto);
+        }
+        return bookResponseDtos;
     }
 }

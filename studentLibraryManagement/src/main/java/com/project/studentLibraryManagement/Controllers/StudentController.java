@@ -1,6 +1,7 @@
 package com.project.studentLibraryManagement.Controllers;
 
 import com.project.studentLibraryManagement.RequestDto.StudentRequestDto;
+import com.project.studentLibraryManagement.ResponseDto.BookResponseDto;
 import com.project.studentLibraryManagement.ResponseDto.StudentDeleteDto;
 import com.project.studentLibraryManagement.ResponseDto.StudentResponseDto;
 import com.project.studentLibraryManagement.ResponseDto.StudentResponseDto2;
@@ -48,6 +49,12 @@ public class StudentController {
     public ResponseEntity<StudentDeleteDto> deleteStudent(@PathVariable int studentId){
         StudentDeleteDto studentDeleteDto=studentService.deleteStudent(studentId);
         return ResponseEntity.status(HttpStatus.OK).body(studentDeleteDto);
+    }
+
+    @GetMapping("/getBooksByStudentEmail")
+    public ResponseEntity<List<BookResponseDto>> getBooks(@RequestParam String studentEmail){
+        List<BookResponseDto> bookResponseDtos=studentService.getBooks(studentEmail);
+        return ResponseEntity.status(HttpStatus.OK).body(bookResponseDtos);
     }
 
 }
