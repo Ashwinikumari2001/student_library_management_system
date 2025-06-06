@@ -3,6 +3,7 @@ package com.project.studentLibraryManagement.Controllers;
 import com.project.studentLibraryManagement.RequestDto.AuthorRequestDto;
 import com.project.studentLibraryManagement.ResponseDto.AuthorDeleteDto;
 import com.project.studentLibraryManagement.ResponseDto.AuthorResponseDto;
+import com.project.studentLibraryManagement.ResponseDto.BookResponseDto;
 import com.project.studentLibraryManagement.Services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,5 +42,11 @@ public class AuthorController {
     public ResponseEntity<AuthorDeleteDto> deleteAuthor(@PathVariable int authorId){
         AuthorDeleteDto authorDeleteDto=authorService.deleteAuthor(authorId);
         return ResponseEntity.status(HttpStatus.OK).body(authorDeleteDto);
+   }
+
+   @GetMapping("/getAllBooks/{authorId}")
+    public ResponseEntity<List<BookResponseDto>> getAllBookByAuthorId(@PathVariable int authorId){
+        List<BookResponseDto> bookResponseDtoList=authorService.getAllBookByAuthorId(authorId);
+        return ResponseEntity.status(HttpStatus.OK).body(bookResponseDtoList);
    }
 }

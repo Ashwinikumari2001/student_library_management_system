@@ -2,13 +2,16 @@ package com.project.studentLibraryManagement.Services;
 
 import com.project.studentLibraryManagement.Models.Address;
 import com.project.studentLibraryManagement.Models.Author;
+import com.project.studentLibraryManagement.Models.Book;
 import com.project.studentLibraryManagement.Repository.AuthorRepository;
 import com.project.studentLibraryManagement.RequestDto.AuthorRequestDto;
 import com.project.studentLibraryManagement.ResponseDto.AuthorDeleteDto;
 import com.project.studentLibraryManagement.ResponseDto.AuthorResponseDto;
+import com.project.studentLibraryManagement.ResponseDto.BookResponseDto;
 import com.project.studentLibraryManagement.Transformers.AddressTransformer;
 import com.project.studentLibraryManagement.Transformers.AuthorResponseTransformer;
 import com.project.studentLibraryManagement.Transformers.AuthorTransformer;
+import com.project.studentLibraryManagement.Transformers.BookResponseTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,5 +70,15 @@ public class AuthorService {
         Author author=authorRepository.findById(authorId).orElseThrow();
         authorRepository.deleteById(authorId);
         return AuthorResponseTransformer.createAuthorDeleteResponse(author);
+    }
+
+    public List<BookResponseDto> getAllBookByAuthorId(int authorId) {
+        Author author=authorRepository.findById(authorId).orElseThrow();
+        List<Book> bookList=author.getBook();
+        List<BookResponseDto> bookResponseDtoList=new ArrayList<>();
+        for(Book book:bookList){
+            bookResponseDtoList.add(BookResponseTransformer.createBookResponseDtoFromBook(book,author));
+        }
+        return bookResponseDtoList;
     }
 }

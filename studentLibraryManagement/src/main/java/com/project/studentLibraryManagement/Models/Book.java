@@ -39,6 +39,7 @@ public class Book {
 
     @OneToMany(mappedBy = "book")
     private List<Transaction> transactions;
+
     @ManyToOne(cascade = CascadeType.ALL)//cascade =CascadeType.All means that all operations
     // (persist, merge, remove, refresh, detach) will be cascaded to the associated entity
     private Card card;

@@ -53,6 +53,9 @@ public class CardService {
         if(card.getCardStatus()== CardStatus.ACTIVE){
             throw new RuntimeException("Card is already ACTIVE");
         }
+        if(card.getCardStatus()==CardStatus.BLOCKED && card.getBooks().size()>=5){
+            throw new RuntimeException("Please return one or more Books");
+        }
         card.setCardStatus(cardRequestDto.getCardStatus());
         card.setExpiryDate(cardRequestDto.getExpiryDate());
         card.setUpdatedDate(new Date());
@@ -68,35 +71,30 @@ public class CardService {
         List<Card> cardList=cardRepository.findByCardStatus(CardStatus.ACTIVE);
         Date date=new Date();
         for(Card card:cardList){
-            if(card.getExpiryDate().before(date)) {
-                updatedCardCount++;
-                card.setCardStatus(CardStatus.EXPIRED);
-                card.setUpdatedDate(new Date());
-                Student student=card.getStudent();
-                cardRepository.save(card);
-                cardResponseDtoList.add(CardResponseTransformer.createCardResponseFromCard(student,card));
-            }
-            LocalDate createdDate = card.getCreatedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate currentDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if(card.getCardStatus()!=CardStatus.BLOCKED) {
 
-            long daysBetween = ChronoUnit.DAYS.between(createdDate, currentDate);
+                LocalDate createdDate = card.getCreatedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate currentDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-            if(daysBetween>90 && card.getTransactions().isEmpty()){
-                updatedCardCount++;
-                card.setCardStatus(CardStatus.INACTIVE);
-                card.setUpdatedDate(new Date());
-                Student student=card.getStudent();
-                cardRepository.save(card);
-                cardResponseDtoList.add(CardResponseTransformer.createCardResponseFromCard(student,card));
-            }
+                long daysBetween = ChronoUnit.DAYS.between(createdDate, currentDate);
 
-            if(card.getBooks().size()>=5){
-                updatedCardCount++;
-                card.setCardStatus(CardStatus.BLOCKED);
-                card.setUpdatedDate(new Date());
-                Student student=card.getStudent();
-                cardRepository.save(card);
-                cardResponseDtoList.add(CardResponseTransformer.createCardResponseFromCard(student,card));
+                if (daysBetween > 90 && card.getTransactions().isEmpty()) {
+                    updatedCardCount++;
+                    card.setCardStatus(CardStatus.INACTIVE);
+                    card.setUpdatedDate(new Date());
+                    Student student = card.getStudent();
+                    cardRepository.save(card);
+                    cardResponseDtoList.add(CardResponseTransformer.createCardResponseFromCard(student, card));
+                }
+
+                if (card.getExpiryDate().before(date)) {
+                    updatedCardCount++;
+                    card.setCardStatus(CardStatus.EXPIRED);
+                    card.setUpdatedDate(new Date());
+                    Student student = card.getStudent();
+                    cardRepository.save(card);
+                    cardResponseDtoList.add(CardResponseTransformer.createCardResponseFromCard(student, card));
+                }
             }
         }
         return CardStatusUpdateTransformer.cardStatusUpdateResponseDto(updatedCardCount,cardResponseDtoList);

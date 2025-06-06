@@ -2,10 +2,7 @@ package com.project.studentLibraryManagement.Models;
 
 import com.project.studentLibraryManagement.Enums.TransactionType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
@@ -16,6 +13,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +21,6 @@ public class Transaction {
     @Column(name = "fine")
     private int fine;
     @Column(name = "transaction_date",nullable = false)
-    @CreationTimestamp//this annotation is used to automatically set the current date and time when the transaction is created
     private Date transactionDate;
     @Column(name = "due_date",nullable = false)
     private Date dueDate;
@@ -32,11 +29,9 @@ public class Transaction {
     private TransactionType transactionType;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Card card;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Book book;
-
-
 }
