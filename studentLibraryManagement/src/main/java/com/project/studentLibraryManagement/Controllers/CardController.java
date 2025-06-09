@@ -1,6 +1,8 @@
 package com.project.studentLibraryManagement.Controllers;
 
 import com.project.studentLibraryManagement.RequestDto.CardRequestDto;
+import com.project.studentLibraryManagement.ResponseDto.BookResponseDto;
+import com.project.studentLibraryManagement.ResponseDto.DeleteResponse;
 import com.project.studentLibraryManagement.ResponseDto.CardResponseDto;
 import com.project.studentLibraryManagement.ResponseDto.CardStatusUpdateResponseDto;
 import com.project.studentLibraryManagement.Services.CardService;
@@ -9,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.smartcardio.Card;
+import java.util.List;
 
 @RestController
 @RequestMapping("/card")
@@ -34,6 +36,14 @@ public class CardController {
         CardStatusUpdateResponseDto cardStatusUpdateResponseDto=cardService.cardStatusUpdate();
         return ResponseEntity.status(HttpStatus.OK).body(cardStatusUpdateResponseDto);
     }
-
-
+    @DeleteMapping("/deleteCard/{cardId}")
+    public ResponseEntity<DeleteResponse> deleteCard(@PathVariable int cardId){
+        DeleteResponse deleteResponse =cardService.cardDelete(cardId);
+        return ResponseEntity.status(HttpStatus.OK).body(deleteResponse);
+    }
+   @GetMapping("/getAllBooks/{cardId}")
+    public ResponseEntity<List<BookResponseDto>> getAllBooks(@PathVariable int cardId){
+        List<BookResponseDto> bookResponseDto=cardService.getAllBooks(cardId);
+        return ResponseEntity.status(HttpStatus.OK).body(bookResponseDto);
+   }
 }

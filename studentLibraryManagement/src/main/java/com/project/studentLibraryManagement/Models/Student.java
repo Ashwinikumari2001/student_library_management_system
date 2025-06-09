@@ -40,4 +40,7 @@ public class Student {
 
     @OneToOne(mappedBy = "student",cascade = CascadeType.ALL)
     private Card card;
+
+    //cascade =CascadeType.All means that all operations
+    // (persist, merge, remove, refresh, detach) will be cascaded to the associated entity
 }

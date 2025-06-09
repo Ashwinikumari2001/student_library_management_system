@@ -1,23 +1,22 @@
 package com.project.studentLibraryManagement.Services;
 
 import com.project.studentLibraryManagement.Enums.CardStatus;
+import com.project.studentLibraryManagement.Models.Author;
+import com.project.studentLibraryManagement.Models.Book;
 import com.project.studentLibraryManagement.Models.Card;
 import com.project.studentLibraryManagement.Models.Student;
 import com.project.studentLibraryManagement.Repository.CardRepository;
 import com.project.studentLibraryManagement.Repository.StudentRepository;
 import com.project.studentLibraryManagement.RequestDto.CardRequestDto;
+import com.project.studentLibraryManagement.ResponseDto.BookResponseDto;
+import com.project.studentLibraryManagement.ResponseDto.DeleteResponse;
 import com.project.studentLibraryManagement.ResponseDto.CardResponseDto;
 import com.project.studentLibraryManagement.ResponseDto.CardStatusUpdateResponseDto;
-import com.project.studentLibraryManagement.Transformers.CardResponseTransformer;
-import com.project.studentLibraryManagement.Transformers.CardStatusUpdateTransformer;
-import com.project.studentLibraryManagement.Transformers.CardTransformer;
+import com.project.studentLibraryManagement.Transformers.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -26,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CardService {
     @Autowired
     private StudentRepository studentRepository;
@@ -98,5 +98,30 @@ public class CardService {
             }
         }
         return CardStatusUpdateTransformer.cardStatusUpdateResponseDto(updatedCardCount,cardResponseDtoList);
+    }
+
+    public DeleteResponse cardDelete(int cardId) {
+        Card card=cardRepository.findById(cardId).orElseThrow();
+        Student student=card.getStudent();
+        student.setCard(null);
+        List<Book> bookList=card.getBooks();
+        for(Book book:bookList){
+            book.setCard(null);
+            book.setAvailability(true);
+        }
+        cardRepository.delete(card);
+        log.info("Card: {} {} {} {}",card,card.getCardStatus(),card.getCreatedDate(),card.getId());
+        return DeleteResponseTransformer.cardDeleteResponse();
+    }
+
+    public List<BookResponseDto> getAllBooks(int cardId) {
+        Card card=cardRepository.findById(cardId).orElseThrow();
+        List<Book> bookList=card.getBooks();
+        ArrayList<BookResponseDto> bookResponseDto=new ArrayList<>();
+        for(Book book:bookList){
+            Author author=book.getAuthor();
+            bookResponseDto.add(BookResponseTransformer.createBookResponseDtoFromBook(book,author));
+        }
+        return bookResponseDto;
     }
 }

@@ -34,13 +34,12 @@ public class Book {
     @Column(name = "rack_no",nullable = false)
     private int rackNo;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Author author;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
-    @ManyToOne(cascade = CascadeType.ALL)//cascade =CascadeType.All means that all operations
-    // (persist, merge, remove, refresh, detach) will be cascaded to the associated entity
+    @ManyToOne
     private Card card;
 }

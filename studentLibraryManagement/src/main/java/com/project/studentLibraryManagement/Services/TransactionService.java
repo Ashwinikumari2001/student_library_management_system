@@ -50,11 +50,11 @@ public class TransactionService {
                     card.setCardStatus(CardStatus.BLOCKED);
                     card.setUpdatedDate(new Date());
                 }
-                bookRepository.save(book);
+                transactionRepository.save(transaction);
 
                 return TransactionTransformer.createTransactionResponse(transaction);
             }else{
-                throw new RuntimeException("Book is not available with Id:"+book.getId()+" and Title: "+book.getTitle());
+                throw new RuntimeException("Book is not available with Id: "+book.getId()+" and Title: "+book.getTitle());
             }
         }else{
             throw new RuntimeException("Card is not ACTIVE, the current status of card is "+card.getCardStatus());
@@ -102,5 +102,18 @@ public class TransactionService {
 
         transactionRepository.save(transaction);
         return TransactionTransformer.createTransactionResponse(transaction);
+    }
+
+    public List<TransactionResponseDto> getAllTransactions() {
+        List<Transaction> transactionList=transactionRepository.findAll();
+        if(transactionList.isEmpty()){
+            throw new RuntimeException("no transactions done");
+        }else{
+            List<TransactionResponseDto> transactionResponseDtoList=new ArrayList<>();
+            for(Transaction transaction:transactionList){
+                transactionResponseDtoList.add(TransactionTransformer.createTransactionResponse(transaction));
+            }
+            return transactionResponseDtoList;
+        }
     }
 }

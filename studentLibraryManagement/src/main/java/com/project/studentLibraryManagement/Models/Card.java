@@ -21,7 +21,7 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "card_id")
-    private Integer id;
+    private int id;
     @Enumerated(EnumType.STRING)
     @Column(name = "card_status",nullable = false)
     private CardStatus cardStatus;
@@ -39,6 +39,6 @@ public class Card {
 
     @OneToMany(mappedBy = "card",cascade = CascadeType.ALL)
     private List<Transaction> transactions;
-    @OneToMany(mappedBy = "card",cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "card")
     private List<Book> books;
 }

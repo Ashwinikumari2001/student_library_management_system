@@ -3,7 +3,9 @@ package com.project.studentLibraryManagement.Services;
 import com.project.studentLibraryManagement.Models.Address;
 import com.project.studentLibraryManagement.Models.Author;
 import com.project.studentLibraryManagement.Models.Book;
+import com.project.studentLibraryManagement.Models.Card;
 import com.project.studentLibraryManagement.Repository.AuthorRepository;
+import com.project.studentLibraryManagement.Repository.CardRepository;
 import com.project.studentLibraryManagement.RequestDto.AuthorRequestDto;
 import com.project.studentLibraryManagement.ResponseDto.AuthorDeleteDto;
 import com.project.studentLibraryManagement.ResponseDto.AuthorResponseDto;
@@ -22,6 +24,8 @@ import java.util.List;
 public class AuthorService {
     @Autowired
     private AuthorRepository authorRepository;
+    @Autowired
+    private CardRepository cardRepository;
 
     public List<AuthorResponseDto> getAllAuthor() {
         List<Author> authorList=authorRepository.findAll();
@@ -68,6 +72,18 @@ public class AuthorService {
 
     public AuthorDeleteDto deleteAuthor(int authorId) {
         Author author=authorRepository.findById(authorId).orElseThrow();
+        List<Book> bookList=author.getBook();
+
+        for(Book book:bookList){
+            Card card=book.getCard();
+            if(card!=null){
+                List<Book> cardBookList=card.getBooks();
+                cardBookList.remove(book);
+                cardRepository.save(card);
+            }
+        }
+
+
         authorRepository.deleteById(authorId);
         return AuthorResponseTransformer.createAuthorDeleteResponse(author);
     }

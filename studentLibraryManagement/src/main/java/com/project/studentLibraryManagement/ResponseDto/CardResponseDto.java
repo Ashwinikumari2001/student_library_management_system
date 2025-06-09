@@ -14,7 +14,7 @@ public class CardResponseDto {
     private String studentName;
     private String studentDepartment;
     private String studentSemester;
-    private Integer cardId;
+    private int cardId;
     private CardStatus cardStatus;
     private Date expiryDate;
     private Date createdDate;

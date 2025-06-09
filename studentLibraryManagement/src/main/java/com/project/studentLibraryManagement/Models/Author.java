@@ -29,7 +29,7 @@ public class Author {
     @OneToOne(mappedBy = "author",cascade = CascadeType.ALL)
     private Address address;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author",cascade = CascadeType.REMOVE)
     private List<Book> book;
 
 }
