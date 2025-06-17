@@ -25,6 +25,8 @@ public class Author {
     private double rating;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Column(name = "author_image_url")
+    private String profileImageURL;
 
     @OneToOne(mappedBy = "author",cascade = CascadeType.ALL)
     private Address address;

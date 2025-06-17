@@ -34,5 +34,4 @@ public class TransactionController {
         List<TransactionResponseDto> transactionResponseDtoList=transactionService.getAllTransactions();
         return ResponseEntity.status(HttpStatus.OK).body(transactionResponseDtoList);
     }
-
 }
