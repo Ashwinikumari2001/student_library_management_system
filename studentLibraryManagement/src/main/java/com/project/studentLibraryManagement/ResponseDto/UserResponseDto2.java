@@ -13,5 +13,5 @@ public class UserResponseDto2 {
     private int userId;
     private String name;
     private String email;
-    private String passward;
+    private String password;
 }

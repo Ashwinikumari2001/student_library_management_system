@@ -11,6 +11,8 @@ import com.project.studentLibraryManagement.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
     @Autowired
@@ -18,6 +20,10 @@ public class UserService {
 
 
     public UserResponseDto addUser(UserRequestDto userRequestDto) {
+        Optional<User> userOptional=userRepository.findByEmail(userRequestDto.getEmail());
+        if(userOptional.isPresent()){
+            throw new RuntimeException("User already exist, please login !!!");
+        }
         User user= UserTransformer.createUserFromUserRequestDto(userRequestDto);
         User savedUser=userRepository.save(user);
         return UserTransformer.createUserResponseDto(savedUser);
@@ -27,11 +33,10 @@ public class UserService {
         return UserTransformer.createUserResponseDto2(user);
 
     }
-    public UserResponseDto2 updateUser(int userId, UserRequestDto userRequestDto){
-        User user=userRepository.findById(userId).orElseThrow(()->new RuntimeException("user not found with given userId!!"));
+    public UserResponseDto2 updateUser(UserRequestDto userRequestDto){
+        User user=userRepository.findByEmail(userRequestDto.getEmail()).orElseThrow(()->new RuntimeException("user not found with given email and password!!"));
         user.setName(userRequestDto.getName());
-        user.setEmail(userRequestDto.getEmail());
-        user.setPassward(userRequestDto.getPassward());
+        user.setPassword(userRequestDto.getPassword());
         User savedUser=userRepository.save(user);
         return UserTransformer.createUserResponseDto2(savedUser);
     }
@@ -43,7 +48,7 @@ public class UserService {
     public UserResponseDto searchUser(LoginRequest loginRequest){
         String email=loginRequest.getEmail();
         String password=loginRequest.getPassword();
-        User user= userRepository.findByEmailAndPassward(email,password);
+        User user= userRepository.findByEmailAndPassword(email,password).orElseThrow(()->new RuntimeException("user not found !!"));
         if(user==null){
             throw new UserNotFoundException("Invalid email or password");
         }

@@ -28,9 +28,9 @@ public class UserController {
         UserResponseDto2 userResponseDto2=userService.getUserById(userId);
         return ResponseEntity.status(HttpStatus.OK).body(userResponseDto2);
     }
-    @PutMapping("/{userId}")
-    public ResponseEntity<UserResponseDto2> updateUser(@PathVariable int userId,@RequestBody UserRequestDto userRequestDto){
-        UserResponseDto2 userResponseDto2=userService.updateUser(userId,userRequestDto);
+    @PutMapping("/update-user")
+    public ResponseEntity<UserResponseDto2> updateUser(@RequestBody UserRequestDto userRequestDto){
+        UserResponseDto2 userResponseDto2=userService.updateUser(userRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(userResponseDto2);
     }
 
@@ -40,7 +40,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userResponseDto);
     }
 
-    @PostMapping("/findByEmailAndPassward")
+    @PostMapping("/loginApi")
     public ResponseEntity<UserResponseDto> findByEmailAndPassward(@RequestBody LoginRequest loginRequest){
         UserResponseDto userResponseDto=userService.searchUser(loginRequest);
         return ResponseEntity.status(HttpStatus.OK).body(userResponseDto);

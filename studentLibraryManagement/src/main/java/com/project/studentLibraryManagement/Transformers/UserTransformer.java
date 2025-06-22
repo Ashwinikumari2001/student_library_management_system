@@ -11,7 +11,7 @@ public class UserTransformer {
         return User.builder()
                 .name(userRequestDto.getName())
                 .email(userRequestDto.getEmail())
-                .passward(userRequestDto.getPassward())
+                .password(userRequestDto.getPassword())
                 .build();
     }
     public static UserResponseDto createUserResponseDto(User user){
@@ -25,7 +25,7 @@ public class UserTransformer {
                 .userId(user.getUserId())
                 .name(user.getName())
                 .email(user.getEmail())
-                .passward(user.getPassward())
+                .password(user.getPassword())
                 .build();
     }
 
